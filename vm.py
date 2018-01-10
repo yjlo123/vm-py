@@ -15,17 +15,24 @@ class Machine(object):
 		self.instruction_pointer = 0
 		self.code = code
 		self.dispatch_map = {
+			#"%":		self.mod,
 			"*":		self.mul,
 			"+":		self.plus,
 			"-":		self.minus,
 			"/":		self.div,
 			#"==":		self.eq,
 			"cast_int": self.cast_int,
-			#"cast_str": self.cast_str,
+			#"cast_str":self.cast_str,
+			#"drop":	self.drop,
+			#"dup":		self.dup,
+			"if":		self.if_stmt,
+			#"jmp":		self.jmp,
 			"over":		self.over,
 			"print":	self.print_,
 			"println":	self.println,
 			"read":		self.read,
+			#"stack":	self.dump_stack,
+			#"swap":	self.swap,
 		}
 
 	def pop(self):
@@ -89,6 +96,12 @@ class Machine(object):
 		self.push(a)
 		self.push(b)
 		self.push(a)
+
+	def if_stmt(self):
+		false_clause = self.pop()
+		true_clause = self.pop()
+		test = self.pop()
+		self.push(true_clause if test else false_clause)
 
 #Machine([2, 3, "+", 4, "*", "println"]).run()
 
