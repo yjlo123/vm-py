@@ -1,5 +1,7 @@
-from collections import deque
 import sys
+import tokenize
+from StringIO import StringIO
+from collections import deque
 
 
 class Stack(deque):
@@ -103,6 +105,49 @@ class Machine(object):
 		test = self.pop()
 		self.push(true_clause if test else false_clause)
 
+def parse(text):
+	tokens = tokenize.generate_tokens(StringIO(text).readline)
+	for toknum, tokval, _, _, _ in tokens:
+		if toknum == tokenize.NUMBER:
+			yield int(tokval)
+		elif toknum in [tokenize.OP, tokenize.STRING, tokenize.NAME]:
+			yield tokval
+		elif toknum == tokenize.ENDMARKER:
+			break
+		else:
+			raise RuntimeError("Unknown token %s: '%s'" %
+					(tokenize.tok_name[toknum], tokval))
+
+def constant_fold(code):
+	"""Constant-folds simple mathematical expressions like 2 3 + to 5."""
+	while True:
+		# Find two consecutive numbers and an arithmetic operator
+		for i, (a, b, op) in enumerate(zip(code, code[1:], code[2:])):
+			if isinstance(a, int) and isinstance(b, int) \
+					and op in {"+", "-", "*", "/"}:
+				m = Machine((a, b, op))
+				m.run()
+				code[i:i+3] = [m.top()]
+				print("Constant-folded %s%s%s to %s" % (a,op,b,m.top()))
+				break
+		else:
+			break
+	return code
+
+def repl():
+	print('Hit CTRL+D or type "exit" to quit.')
+
+	while True:
+		try:
+			source = input("> ")
+			code = list(parse(source))
+			code = constant_fold(code)
+			Machine(code).run()
+		except (RuntimeError, IndexError) as e:
+			print("IndexError: %s" % e)
+		except KeyboardInterrupt:
+			print("\nKeyboardInterrupt")
+
 #Machine([2, 3, "+", 4, "*", "println"]).run()
 
 Machine([
@@ -112,3 +157,5 @@ Machine([
 	'"Their sum is: "', "print", "+", "println",
 	'"Their product is: "', "print", "*", "println"
 ]).run()
+
+#repl()
