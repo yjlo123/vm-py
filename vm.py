@@ -1,8 +1,7 @@
+import io
 import sys
 import tokenize
-from StringIO import StringIO
 from collections import deque
-
 
 class Stack(deque):
 	push = deque.append
@@ -87,7 +86,7 @@ class Machine(object):
 		sys.stdout.flush()
 
 	def read(self):
-		self.push(raw_input())
+		self.push(input())
 
 	def cast_int(self):
 		self.push(int(self.pop()))
@@ -106,7 +105,7 @@ class Machine(object):
 		self.push(true_clause if test else false_clause)
 
 def parse(text):
-	tokens = tokenize.generate_tokens(StringIO(text).readline)
+	tokens = tokenize.generate_tokens(io.StringIO(text).readline)
 	for toknum, tokval, _, _, _ in tokens:
 		if toknum == tokenize.NUMBER:
 			yield int(tokval)
