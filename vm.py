@@ -139,6 +139,8 @@ def repl():
 	while True:
 		try:
 			source = input("> ")
+			if source == "exit":
+				break
 			code = list(parse(source))
 			code = constant_fold(code)
 			Machine(code).run()
@@ -148,7 +150,7 @@ def repl():
 			print("\nKeyboardInterrupt")
 
 #Machine([2, 3, "+", 4, "*", "println"]).run()
-
+'''
 Machine([
 	'"Enter a number: "', "print", "read", "cast_int",
 	'"Enter another number: "', "print", "read", "cast_int",
@@ -156,5 +158,5 @@ Machine([
 	'"Their sum is: "', "print", "+", "println",
 	'"Their product is: "', "print", "*", "println"
 ]).run()
-
-#repl()
+'''
+repl()
