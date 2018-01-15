@@ -16,7 +16,7 @@ class Machine(object):
 		self.instruction_pointer = 0
 		self.code = code
 		self.dispatch_map = {
-			#"%":		self.mod,
+			"%":		self.mod,
 			"*":		self.mul,
 			"+":		self.plus,
 			"-":		self.minus,
@@ -63,8 +63,10 @@ class Machine(object):
 		else:
 			raise RuntimeError("Unknown opcode: '%s'" % op)
 
-	def mul(self):
-		self.push(self.pop() * self.pop())
+
+	def mod(self):
+		last = self.pop()
+		self.push(self.pop() % last)
 
 	def plus(self):
 		self.push(self.pop() + self.pop())
@@ -72,6 +74,9 @@ class Machine(object):
 	def minus(self):
 		last = self.pop()
 		self.push(self.pop() - last)
+
+	def mul(self):
+		self.push(self.pop() * self.pop())
 
 	def div(self):
 		last = self.pop()
@@ -123,7 +128,7 @@ def constant_fold(code):
 		# Find two consecutive numbers and an arithmetic operator
 		for i, (a, b, op) in enumerate(zip(code, code[1:], code[2:])):
 			if isinstance(a, int) and isinstance(b, int) \
-					and op in {"+", "-", "*", "/"}:
+					and op in {"+", "-", "*", "/", "%"}:
 				m = Machine((a, b, op))
 				m.run()
 				code[i:i+3] = [m.top()]
