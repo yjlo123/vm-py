@@ -34,6 +34,7 @@ class Machine(object):
 			"read":		self.read,
 			#"stack":	self.dump_stack,
 			#"swap":	self.swap,
+			"exit":		self.exit,
 		}
 
 	def pop(self):
@@ -108,6 +109,9 @@ class Machine(object):
 		true_clause = self.pop()
 		test = self.pop()
 		self.push(true_clause if test else false_clause)
+
+	def exit(self):
+		sys.exit(0)
 
 def parse(text):
 	tokens = tokenize.generate_tokens(io.StringIO(text).readline)
