@@ -25,7 +25,7 @@ class Machine(object):
 			"cast_int": self.cast_int,
 			#"cast_str":self.cast_str,
 			#"drop":	self.drop,
-			#"dup":		self.dup,
+			"dup":		self.dup,
 			"if":		self.if_stmt,
 			#"jmp":		self.jmp,
 			"over":		self.over,
@@ -64,6 +64,9 @@ class Machine(object):
 		else:
 			raise RuntimeError("Unknown opcode: '%s'" % op)
 
+
+	def dup(self):
+		self.push(self.top())
 
 	def mod(self):
 		last = self.pop()
@@ -148,8 +151,6 @@ def repl():
 	while True:
 		try:
 			source = input("> ")
-			if source == "exit":
-				break
 			code = list(parse(source))
 			code = constant_fold(code)
 			Machine(code).run()
