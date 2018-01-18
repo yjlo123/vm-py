@@ -32,7 +32,7 @@ class Machine(object):
 			"print":	self.print_,
 			"println":	self.println,
 			"read":		self.read,
-			#"stack":	self.dump_stack,
+			"stack":	self.dump_stack,
 			#"swap":	self.swap,
 			"exit":		self.exit,
 		}
@@ -64,6 +64,10 @@ class Machine(object):
 		else:
 			raise RuntimeError("Unknown opcode: '%s'" % op)
 
+	def dump_stack(self):
+		print("<Top>")
+		for v in reversed(self.data_stack):
+			print(" - type %s, value '%s'" % (type(v), v))
 
 	def dup(self):
 		self.push(self.top())
