@@ -21,7 +21,7 @@ class Machine(object):
 			"+":		self.plus,
 			"-":		self.minus,
 			"/":		self.div,
-			#"==":		self.eq,
+			"==":		self.equal,
 			"cast_int": self.cast_int,
 			#"cast_str":self.cast_str,
 			#"drop":	self.drop,
@@ -89,6 +89,9 @@ class Machine(object):
 	def div(self):
 		last = self.pop()
 		self.push(self.pop() / last)
+
+	def equal(self):
+		self.push(self.pop() == self.pop())
 
 	def print_(self):
 		sys.stdout.write(str(self.pop()))
