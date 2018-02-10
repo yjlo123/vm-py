@@ -22,6 +22,8 @@ class Machine(object):
 			"-":		self.minus,
 			"/":		self.div,
 			"==":		self.equal,
+			">":		self.gt,
+			"<":		self.lt,
 			"cast_int": self.cast_int,
 			#"cast_str":self.cast_str,
 			#"drop":	self.drop,
