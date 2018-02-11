@@ -33,6 +33,7 @@ class Machine(object):
 			"over":		self.over,
 			"print":	self.print_,
 			"println":	self.println,
+			".":		self.println,
 			"read":		self.read,
 			"stack":	self.dump_stack,
 			#"swap":	self.swap,
@@ -94,6 +95,14 @@ class Machine(object):
 
 	def equal(self):
 		self.push(self.pop() == self.pop())
+
+	def gt(self):
+		last = self.pop()
+		self.push(self.pop() > last)
+
+	def lt(self):
+		last = self.pop()
+		self.push(self.pop() < last)
 
 	def print_(self):
 		sys.stdout.write(str(self.pop()))
